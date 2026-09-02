@@ -15,10 +15,11 @@
 
 """Tests for the configarium-runtime library's python_logging runtime."""
 from configarium_models.models.python_logging import LoggingConfig
+
 from configarium_runtime.runtime.python_logging import PythonLoggingRuntime
 
 
-def test_basic_config():
+def test_basic_config() -> None:
     """Tests for the configarium-runtime library's python_logging runtime."""
     config = LoggingConfig()
     PythonLoggingRuntime.apply_model(config)
