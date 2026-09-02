@@ -1,0 +1,27 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/astral-sh/uv:python3.10-bookworm
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Ruff
+        run: uv run ruff check .
+
+      - name: ty
+        run: uv run ty check
+
+      - name: Unit tests
+        run: uv run pytest
