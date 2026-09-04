@@ -4,19 +4,26 @@ authors = [{ name = "NigelB", email = "nigel.blair@gmail.com" }]
 description = "A Python library providing runtime utilities for configarium-models."
 requires-python = ">=3.10"
 version = "0.0.1"
-dynamic = ["dependencies", "optional-dependencies"]
 readme = "README.md"
 license = "Apache-2.0"
 license-files = [
     "LICENSE",
 ]
 
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
-optional-dependencies = {
-    dev = { file = ["requirements.txt", "requirements-dev.txt"] },
-    mqtt = { file = ["requirements.txt", "requirements-mqtt.txt"] },
-}
+dependencies = [
+    "pydantic>=2.13.5",
+    "configarium-models @ git+https://github.com/nigelb/configarium-models.git",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "ty",
+    "pytest",
+]
+mqtt = [
+    "paho-mqtt>=2.0.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

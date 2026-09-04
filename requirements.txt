@@ -1,2 +1,0 @@
-pydantic>=2.13.5
-configarium-models @ https://github.com/nigelb/configarium-models.git
