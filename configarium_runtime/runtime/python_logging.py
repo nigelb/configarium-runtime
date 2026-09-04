@@ -24,9 +24,9 @@ class PythonLoggingRuntime:
     """Runtime class to apply the LoggingConfig configuration."""
 
     @classmethod
-    def apply_model(cls, model: LoggingConfig) -> None:
+    def apply_model(cls, model: LoggingConfig, **kwargs: str | int | None) -> None:
         """Apply the model and configure python logging by calling logging.basicConfig."""
-        logging.basicConfig(
+        kwargs.update(
             format=model.format,
             datefmt=model.date_format,
             style=model.style,
@@ -34,5 +34,6 @@ class PythonLoggingRuntime:
             filename=model.filename,
             filemode=model.filemode,
         )
+        logging.basicConfig(**kwargs)
         for lgr in model.logger_configs:
             logging.getLogger(lgr.logger_name).setLevel(logging._nameToLevel[lgr.log_level.upper()]) # noqa: SLF001 getLevelNamesMapping not until python3.12
