@@ -16,6 +16,7 @@
 """A runtime implementation for configarium-models's python_logging model."""
 
 import logging
+from typing import TextIO
 
 from configarium_models.models.python_logging import LoggingConfig
 
@@ -24,7 +25,7 @@ class PythonLoggingRuntime:
     """Runtime class to apply the LoggingConfig configuration."""
 
     @classmethod
-    def apply_model(cls, model: LoggingConfig, **kwargs: str | int | None) -> None:
+    def apply_model(cls, model: LoggingConfig, **kwargs: str | int | TextIO | None) -> None:
         """Apply the model and configure python logging by calling logging.basicConfig."""
         kwargs.update(
             format=model.format,
