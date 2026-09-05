@@ -14,6 +14,10 @@
 # limitations under the License.
 
 """Tests for the configarium-runtime library's python_logging runtime."""
+
+import logging
+import sys
+
 from configarium_models.models.python_logging import LoggingConfig
 
 from configarium_runtime.runtime.python_logging import PythonLoggingRuntime
@@ -23,3 +27,24 @@ def test_basic_config() -> None:
     """Tests for the configarium-runtime library's python_logging runtime."""
     config = LoggingConfig()
     PythonLoggingRuntime.apply_model(config)
+
+
+def test_apply_model_configures_stderr_stream() -> None:
+    """Test that apply_model configures a stderr stream handler."""
+    original_handlers = logging.root.handlers[:]
+
+    logging.root.handlers.clear()
+
+    try:
+        config = LoggingConfig()
+
+        PythonLoggingRuntime.apply_model(config, stream=sys.stderr)
+
+        assert len(logging.root.handlers) == 1
+
+        handler = logging.root.handlers[0]
+        assert isinstance(handler, logging.StreamHandler)
+        assert handler.stream is sys.stderr
+    finally:
+        logging.root.handlers.clear()
+        logging.root.handlers.extend(original_handlers)

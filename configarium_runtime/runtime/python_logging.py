@@ -16,7 +16,7 @@
 """A runtime implementation for configarium-models's python_logging model."""
 
 import logging
-from typing import TextIO
+from typing import Any
 
 from configarium_models.models.python_logging import LoggingConfig
 
@@ -25,16 +25,15 @@ class PythonLoggingRuntime:
     """Runtime class to apply the LoggingConfig configuration."""
 
     @classmethod
-    def apply_model(cls, model: LoggingConfig, **kwargs: str | int | TextIO | None) -> None:
+    def apply_model(cls,
+                    model: LoggingConfig,
+                    **kwargs: Any, #noqa: ANN401 ruff/ty 🤯
+                    ) -> None:
         """Apply the model and configure python logging by calling logging.basicConfig."""
-        kwargs.update(
-            format=model.format,
-            datefmt=model.date_format,
-            style=model.style,
-            level=logging._nameToLevel[model.log_level.upper()], # noqa: SLF001 getLevelNamesMapping not until python3.12
-            filename=model.filename,
-            filemode=model.filemode,
-        )
+        for name in model.model_fields_set:
+            value = getattr(model, name)
+            if value is not None:
+                kwargs.update({name: value})
         logging.basicConfig(**kwargs)
         for lgr in model.logger_configs:
             logging.getLogger(lgr.logger_name).setLevel(logging._nameToLevel[lgr.log_level.upper()]) # noqa: SLF001 getLevelNamesMapping not until python3.12
